@@ -16,13 +16,18 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::firstOrCreate(
+    /*     User::firstOrCreate(
             ['email' => 'santi@example.com'],
             [
                 'name' => 'santi',
                 'password' => Hash::make('12345678'),
                 'email_verified_at' => now(),
             ]
-        );
+        ); */
+
+        $this -> call([
+            RolesSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }
