@@ -29,4 +29,4 @@ class RolesSeeder extends Seeder
         $userRole->syncPermissions([$buyProducts]);
     }
 }
-     
+      

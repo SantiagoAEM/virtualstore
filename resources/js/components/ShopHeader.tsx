@@ -75,7 +75,7 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
             <div className="border-b border-sidebar-border/80">
                 <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                     {/* Mobile Menu */}
-                    <div className="lg:hidden">
+                    <div className="lg:hidden"> 
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button
@@ -90,6 +90,7 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 side="left"
                                 className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar"
                             >
+                                
                                 <SheetTitle className="sr-only">
                                     Navigation Menu
                                 </SheetTitle>
@@ -97,6 +98,7 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
                                 </SheetHeader>
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
+                                    
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
                                             {mainNavItems.map((item) => (
@@ -140,10 +142,12 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                                 </a>
                                             ))}
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </SheetContent>
                         </Sheet>
+                        
                     </div>
 
                     <Link
@@ -152,8 +156,9 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         className="flex items-center space-x-2"
                     >
                         <AppLogo />
+                        
                     </Link>
-
+                   
                     {/* Desktop Navigation */}
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
