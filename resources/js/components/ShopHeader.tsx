@@ -32,7 +32,7 @@ import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, Menu, Search,ShoppingCartIcon } from 'lucide-react';
+import { LayoutGrid, Menu, Search,ShoppingCartIcon,Heart } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import {  login, register } from '@/routes';
@@ -50,6 +50,11 @@ const rightNavItems: NavItem[] = [
         title: 'Shopping car',
         href: 'https://github.com/laravel/react-starter-kit',
         icon: ShoppingCartIcon,
+    },
+        {
+        title: 'Liked products',
+        href: 'https://github.com/laravel/react-starter-kit',
+        icon: Heart,
     },
 ];
 
@@ -198,45 +203,47 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="hidden lg:flex">
-                                {rightNavItems.map((item) => (
-                                    <TooltipProvider
-                                        key={item.title}
-                                        delayDuration={0}
-                                    >
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <a
-                                                    href={
-                                                        typeof item.href ===
-                                                        'string'
-                                                            ? item.href
-                                                            : item.href.url
-                                                    }
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="group ml-1 inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent p-0 text-sm font-medium text-accent-foreground ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
-                                                >
-                                                    <span className="sr-only">
-                                                        {item.title}
-                                                    </span>
-                                                    {item.icon && (
-                                                        <Icon
-                                                            iconNode={item.icon}
-                                                            className="size-5 opacity-80 group-hover:opacity-100"
-                                                        />
-                                                    )}
-                                                </a>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>{item.title}</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                ))}
+                                
 
                                 <nav className="flex items-center justify-end gap-4">
                                 {auth.user ? (
+                                    
                                     <DropdownMenu>
+                                        {rightNavItems.map((item) => (
+                                            <TooltipProvider
+                                                key={item.title}
+                                                delayDuration={0}
+                                            >
+                                                <Tooltip>
+                                                    <TooltipTrigger>
+                                                        <a
+                                                            href={
+                                                                typeof item.href ===
+                                                                'string'
+                                                                    ? item.href
+                                                                    : item.href.url
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="group ml-1 inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent p-0 text-sm font-medium text-accent-foreground ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                                        >
+                                                            <span className="sr-only">
+                                                                {item.title}
+                                                            </span>
+                                                            {item.icon && (
+                                                                <Icon
+                                                                    iconNode={item.icon}
+                                                                    className="size-5 opacity-80 group-hover:opacity-100"
+                                                                />
+                                                            )}
+                                                        </a>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>{item.title}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                ))}
                                         <DropdownMenuTrigger asChild>
                                             <Button
                                                 variant="ghost"
@@ -257,23 +264,24 @@ export default function ShopHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                             <UserMenuContent user={auth.user} />
                                         </DropdownMenuContent>
                                     </DropdownMenu>
-                                ) : (
-                            <>
-                                <Link
-                                    href={login()}
-                                    className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
-                                >
-                                    Log in
-                                </Link>
-                                <Link
-                                    href={register()}
-                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </nav>
+                                    ) : (
+                                        <>
+                                            <Link
+                                                href={login()}
+                                                className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                            >
+                                                Log in
+                                            </Link>
+                                            <Link
+                                                href={register()}
+                                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                            >
+                                                Register
+                                            </Link>
+                                            
+                                        </>
+                                    )}
+                                </nav>                               
                             </div>
                         </div>
                      
