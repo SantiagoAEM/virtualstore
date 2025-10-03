@@ -15,7 +15,8 @@ class DeparmentController extends Controller
      */
     public function index()
     {
-        return  inertia('admin/deparment/Index');
+        $deparments = Deparment::paginate(10);
+        return  inertia('admin/deparment/Index', compact('deparments'));
     }
 
     /**
