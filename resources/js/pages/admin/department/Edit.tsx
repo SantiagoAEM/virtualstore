@@ -9,6 +9,15 @@ import React from 'react'
 import { DepartmentFormData } from './create'
 import { useForm } from 'react-hook-form'
 import { Department } from './columns'
+import { zodResolver } from '@hookform/resolvers/zod'
+import z from 'zod'
+
+export const departmentSchema = z.object({
+  name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
+  slug: z.string().min(1, 'El slug es obligatorio'),
+  meta_title: z.string().optional(),
+  meta_description: z.string().optional(),
+})
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,6 +40,7 @@ export default function Edit({department}:{department:Department}) {
 
 
 const form = useForm<DepartmentFormData>({
+   resolver: zodResolver(departmentSchema),
       defaultValues: {
       name: department?.name || '',
       slug: department?.slug || '',
@@ -46,9 +56,13 @@ const onSubmit = (data: DepartmentFormData) => {
         console.log("Actualizado correctamente")
       },
       onError: (errors) => {
-        console.error("Errores:", errors)
-      }
-    })
+         Object.entries(errors).forEach(([key, value]) => {
+          form.setError(key as keyof DepartmentFormData, {
+            message: value as string,
+          });
+        });
+      },
+    });
   }
   return (
        <AppLayout breadcrumbs={breadcrumbs}>

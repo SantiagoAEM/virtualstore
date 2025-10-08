@@ -59,7 +59,7 @@ export default function Create() {
         form.reset(); // Opcional: limpia el formulario
       },
       onError: (errors) => {
-        // Puedes pasar los errores al hook de react-hook-form si lo deseas
+        // Puede pasar los errores al hook de react-hook-form
         Object.entries(errors).forEach(([key, value]) => {
           form.setError(key as keyof DepartmentFormData, {
             message: value as string,
