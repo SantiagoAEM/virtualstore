@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\DeparmentController;
+use App\Http\Controllers\Admin\DepartmentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,8 +18,9 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('deparment', DeparmentController::class)
-    ->middleware(['verified']);
+    Route::resource('department', DepartmentController::class)
+    ->middleware(['verified'])
+    ->names('department');
 
 });
 

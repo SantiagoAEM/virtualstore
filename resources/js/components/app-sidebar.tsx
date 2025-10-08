@@ -24,7 +24,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Deparment',
-        href: '/deparment',
+        href: '/department/',
         icon: Store,
     },
 ];

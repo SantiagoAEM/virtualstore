@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+
  
 import { Button } from "@/components/ui/button"
 import {
@@ -12,15 +13,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Link } from "@inertiajs/react";
+import department from "@/routes/department";
 
 
 export type Department = {
-  id: string,
+  id: number,
   name: string,
   slug: string,
-  meta_tile:string,
+  meta_title:string,
   meta_description:string,
 }
+
+
 
 export const columns: ColumnDef<Department>[] = [
     {
@@ -46,7 +51,7 @@ export const columns: ColumnDef<Department>[] = [
     {
     id: "actions",
     cell: ({ row }) => {
-      const deparment = row.original
+      const deparments = row.original
  
       return (
         <DropdownMenu>
@@ -59,13 +64,20 @@ export const columns: ColumnDef<Department>[] = [
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(deparment.id)}
+             
             >
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+           <Link href={department.edit.url(deparments.id)} title='Edit'> <DropdownMenuItem>Edit</DropdownMenuItem></Link>
+            <DropdownMenuItem>
+              <form method="post" action={department.destroy.form(deparments.id).action}>
+                <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit">Delete</button>
+                
+                </form>
+                
+          </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

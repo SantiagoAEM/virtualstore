@@ -6,6 +6,8 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table"
 
 import {
@@ -17,6 +19,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { router } from "@inertiajs/react";
+import { Input } from "@/components/ui/input"
+import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,16 +42,34 @@ export function DataTable<TData, TValue>({
   currentPage,
 
 }: DataTableProps<TData, TValue>) {
+   const [columnFilters, setColumnFilters] = 
+    React.useState<ColumnFiltersState>(
+    []
+    )
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   })
 
   return (
    <div>
+       <div className="flex justify-end py-4">
+        <Input
+          placeholder="Filter by name..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="w-full max-w-sm"
+        />
+      </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
         <TableHeader>
