@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form'
 import { Department } from './columns'
 import { zodResolver } from '@hookform/resolvers/zod'
 import z from 'zod'
+import { toast } from 'sonner'
+import { Toaster } from '@/components/ui/sonner'
 
 export const departmentSchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
@@ -53,7 +55,8 @@ const onSubmit = (data: DepartmentFormData) => {
       preserveScroll: true,
       onSuccess: () => {
         // puedes mostrar un toast o redirigir
-        console.log("Actualizado correctamente")
+      toast("Departamento actualizado correctamente");
+     
       },
       onError: (errors) => {
          Object.entries(errors).forEach(([key, value]) => {
@@ -67,7 +70,7 @@ const onSubmit = (data: DepartmentFormData) => {
   return (
        <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Department edit" />
-
+<Toaster />
     <div className="container mx-auto p-3">
        <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

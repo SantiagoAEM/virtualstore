@@ -41,7 +41,7 @@ class DepartmentController extends Controller
 
     Department::create($validated);
 
-    return redirect()->route('department.index')->with('success', 'Departamento creado correctamente.');
+    return redirect()->route('department.index')->with('success', 'Department created successfully');
     }
 
     /**
@@ -78,14 +78,18 @@ class DepartmentController extends Controller
 
         $department->update($data);
 
-        return redirect()->route('department.index');
+        return redirect()->route('department.index')->with('success', 'Deparment updated successfully');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $deparment)
+    public function destroy(Department $department)
     {
-        //
+        $department->delete();
+
+        return redirect()->route('department.index')->with('success', 'Deparment deleted successfully');
+
     }
 }
