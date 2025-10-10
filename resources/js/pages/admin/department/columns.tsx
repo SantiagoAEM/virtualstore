@@ -23,6 +23,7 @@ export type Department = {
   slug: string
   meta_title: string
   meta_description: string
+  active:boolean
 }
 
 function DepartmentActions({ departmentItem }: { departmentItem: Department }) {
@@ -51,17 +52,10 @@ function DepartmentActions({ departmentItem }: { departmentItem: Department }) {
 
         <DropdownMenuContent align="start">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-          <DropdownMenuItem onClick={() => navigator.clipboard.writeText(`${departmentItem.id}`)}>
-            Copy ID
-          </DropdownMenuItem>
-
           <DropdownMenuSeparator />
-
           <Link href={department.edit.url(departmentItem.id)}>
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </Link>
-
         <DropdownMenuItem onClick={() => setOpenDialog(true)}>
             Eliminar
           </DropdownMenuItem>
@@ -81,10 +75,6 @@ function DepartmentActions({ departmentItem }: { departmentItem: Department }) {
 
 export const columns: ColumnDef<Department>[] = [
   {
-    accessorKey: "id",
-    header: "Id",
-  },
-  {
     accessorKey: "name",
     header: "Name",
   },
@@ -99,6 +89,15 @@ export const columns: ColumnDef<Department>[] = [
   {
     accessorKey: "meta_description",
     header: "Meta description",
+  },
+  {
+    accessorKey: "active",
+    header: "Published",
+    cell: ({ row }) => (
+      row.original.active
+        ? <span className="text-green-600 font-semibold">Yes</span>
+        : <span className="text-red-600 font-semibold">No</span>
+    ),
   },
   {
     id: "actions",

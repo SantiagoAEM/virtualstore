@@ -13,12 +13,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import z from 'zod'
 import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
+import { Switch } from '@/components/ui/switch'
 
 export const departmentSchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
   slug: z.string().min(1, 'El slug es obligatorio'),
   meta_title: z.string().optional(),
   meta_description: z.string().optional(),
+  active:z.boolean(),
 })
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -48,8 +50,10 @@ const form = useForm<DepartmentFormData>({
       slug: department?.slug || '',
       meta_title: department?.meta_title || '',
       meta_description: department?.meta_description || '',
+      active:department?.active??false
     },
   });
+
 const onSubmit = (data: DepartmentFormData) => {
     router.put(`/department/${department.id}`, data, {
       preserveScroll: true,
@@ -130,6 +134,24 @@ const onSubmit = (data: DepartmentFormData) => {
               </FormItem>
             )}
           />
+
+
+            <FormField
+              control={form.control}
+              name="active"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Switch
+                      id="active"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="active">Activo</FormLabel>
+                </FormItem>
+              )}
+            />
 
           <Button type="submit">Save</Button>
         </form>

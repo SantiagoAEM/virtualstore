@@ -37,8 +37,10 @@ class DepartmentController extends Controller
         'slug' => 'required|string|unique:departments,slug',
         'meta_title' => 'nullable|string',
         'meta_description' => 'nullable|string',
+        'active' => 'boolean',
     ]);
-
+   
+   
     Department::create($validated);
 
     return redirect()->route('department.index')->with('success', 'Department created successfully');
@@ -74,6 +76,7 @@ class DepartmentController extends Controller
         ],
         'meta_title' => 'nullable|string',
         'meta_description' => 'nullable|string',
+        'active' => 'boolean',
      ]);
 
         $department->update($data);

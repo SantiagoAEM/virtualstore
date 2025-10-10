@@ -15,12 +15,15 @@ import { Head, router, } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { Switch } from '@/components/ui/switch';
+
 
 export const departmentSchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
   slug: z.string().min(1, 'El slug es obligatorio'),
   meta_title: z.string().optional(),
   meta_description: z.string().optional(),
+  active: z.boolean(),
 })
 
 export type DepartmentFormData = z.infer<typeof departmentSchema>
@@ -49,6 +52,8 @@ export default function Create() {
         slug: '',
         meta_title: '',
         meta_description: '',
+        active:true,
+        
     },
   });
 
@@ -56,7 +61,7 @@ export default function Create() {
   function onSubmit(values: DepartmentFormData) {
     router.post('/department', values, {
       onSuccess: () => {
-        form.reset(); // Opcional: limpia el formulario
+      
       },
       onError: (errors) => {
         // Puede pasar los errores al hook de react-hook-form
@@ -75,7 +80,7 @@ export default function Create() {
 
     <div className="container mx-auto p-3">
        <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
           <FormField
             control={form.control}
@@ -133,6 +138,22 @@ export default function Create() {
             )}
           />
 
+            <FormField
+              control={form.control}
+              name="active"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Switch
+                      id="active"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="active">Activo</FormLabel>
+                </FormItem>
+              )}
+            />
           <Button type="submit">Save</Button>
         </form>
       </Form>

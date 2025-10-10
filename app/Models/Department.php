@@ -11,6 +11,6 @@ class Department extends Model
         'slug',
         'meta_title',
         'meta_description',
-       
+        'active',
     ];
 }
