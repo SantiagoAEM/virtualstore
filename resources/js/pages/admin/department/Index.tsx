@@ -19,6 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         {
         title: 'Department',
         href: '/department',
+        
     },
 ];
 
@@ -52,8 +53,7 @@ const { props } = usePage<PageProps>();
     <AppLayout breadcrumbs={breadcrumbs}>
     <div>
       <Head title="Department" />
-<Toaster />
-    deparment
+
     <div className="container mx-auto p-3">
       <Link href='/department/create'>
         <Button  size="sm">
@@ -72,6 +72,7 @@ const { props } = usePage<PageProps>();
     </div>
 
     </div>
+    <Toaster />
 </AppLayout>
   )
 }
