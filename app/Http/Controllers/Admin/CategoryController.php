@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -13,9 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-/*         $categories = Category::paginate(5); 
-        return inertia('admin/categores/index',compact($categories)); */
-        return "categorieas";
+        $categories = Category::with(['department', 'parent'])->paginate(10);
+        $departments = Department::all();
+        return inertia('admin/categories/index',compact('categories','departments'));
+       
     }
 
     /**
@@ -23,7 +26,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //sdsd
+        $departments = Department::all();
+        $categories = Category::whereNull('parent_id')->get(); 
+        return inertia('admin/categories/create',compact('categories','departments'));
     }
 
     /**
@@ -31,7 +36,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+    // ⚠️ Convertir antes de validar
+    if (isset($data['parent_id']) && $data['parent_id'] == 0) {
+        $data['parent_id'] = null;
+    }
+
+    $validated = Validator::make($data, [
+        'name' => 'required|string|min:3',
+        'active' => 'boolean',
+        'parent_id' => 'nullable|integer|exists:categories,id',
+        'department_id' => 'integer',
+    ])->validate();
+
+    Category::create($validated);
+
+    return redirect()->route('categories.index');
     }
 
     /**
