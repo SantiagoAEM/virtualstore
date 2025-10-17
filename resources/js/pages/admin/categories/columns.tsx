@@ -15,6 +15,7 @@ import {
 import { Link, router } from "@inertiajs/react"
 import ConfirmDelete from "@/components/ui/confirm-delete"
 import categories from "@/routes/categories"
+import { ChevronsUpDown } from "lucide-react"
 
 export type Category = {
  id: number
@@ -82,20 +83,50 @@ function DepartmentActions({ categoryItem }: { categoryItem: Category }) {
 export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "department_id",
-    header: "Department",
+      header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Department
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => (
       row.original.department
         ? row.original.department.name
-        : <span className="text-gray-400 italic">N/A</span>
+        : <span className="text-gray-300 italic">N/A</span>
     ),
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "parent_id",
-    header: "Parent",
+      header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => (
       row.original.parent
         ? row.original.parent.name

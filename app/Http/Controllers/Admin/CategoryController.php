@@ -13,13 +13,37 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $categories = Category::with(['department', 'parent'])->paginate(10);
-        $departments = Department::all();
-        return inertia('admin/categories/index',compact('categories','departments'));
-       
+public function index()
+{
+    $allCategories = Category::with(['department', 'parent'])
+        ->orderBy('name')
+        ->get();
+
+    $categories = $this->organizeCategories($allCategories);
+
+    $departments = Department::all();
+
+    return inertia('admin/categories/index', compact('categories', 'departments'));
+}
+
+private function organizeCategories($categories)
+{
+    $grouped = $categories->groupBy('parent_id');
+
+    $sorted = collect();
+
+    // Primero los padres (parent_id = null)
+    foreach ($grouped[null] ?? [] as $parent) {
+        $sorted->push($parent);
+
+        // Luego los hijos
+        foreach ($grouped[$parent->id] ?? [] as $child) {
+            $sorted->push($child);
+        }
     }
+
+    return $sorted->values(); // Devuelve la colección limpia
+}
 
     /**
      * Show the form for creating a new resource.
@@ -84,6 +108,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+         $category->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
     }
 }

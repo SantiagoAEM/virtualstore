@@ -23,14 +23,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Deparmentpagination{
-  data:Department[];
-  current_page: number;
-  last_page: number;
-  next_page_url?: string | null;
-  prev_page_url?: string | null;
-  path: string;
-}
 
 interface PageProps {
   flash?: {
@@ -40,7 +32,7 @@ interface PageProps {
   [key: string]: unknown; 
 }
 
-export default function Index({departments}:{departments:Deparmentpagination}) {
+export default function Index({ departments }: { departments: Department[] }) {
 const { props } = usePage<PageProps>();
 
   useEffect(() => {
@@ -62,12 +54,7 @@ const { props } = usePage<PageProps>();
       </Link>
       <DataTable 
         columns={columns} 
-        data={departments.data} 
-        nextpageurl={departments.next_page_url}
-        prevpageurl={departments.prev_page_url}
-        currentPage={departments.current_page}
-        lastPage={departments.last_page}
-        basePath={departments.path}
+        data={departments}
       />
     </div>
 

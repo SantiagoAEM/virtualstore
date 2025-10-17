@@ -15,7 +15,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::paginate(5);
+        $departments = Department::all();
         return  inertia('admin/department/Index', compact('departments'));
     }
 

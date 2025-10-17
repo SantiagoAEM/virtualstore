@@ -20,18 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
-
-interface Categorypagination{
-  data:Category[];
-  current_page: number;
-  last_page: number;
-  next_page_url?: string | null;
-  prev_page_url?: string | null;
-  path: string;
-}
-
-export default function index({categories}:{categories:Categorypagination}) {
+export default function index({ categories }: { categories: Category[] }) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Categories" />
@@ -43,12 +32,7 @@ export default function index({categories}:{categories:Categorypagination}) {
           </Link>
           <DataTable 
                   columns={columns} 
-                  data={categories.data} 
-                  prevpageurl={categories.prev_page_url}
-                  nextpageurl={categories.next_page_url}
-                  currentPage={categories.current_page}
-                  lastPage={categories.last_page}
-                  basePath={categories.path}
+                  data={categories} 
                 />
        </div>
     </AppLayout>

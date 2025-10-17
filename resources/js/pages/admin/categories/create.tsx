@@ -97,9 +97,9 @@ function onSubmit(values: CategoryFormData) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nombre</FormLabel>
+                <FormLabel>Category name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ej: Department name" {...field} />
+                  <Input placeholder="Ej: Sweeter" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -140,18 +140,18 @@ function onSubmit(values: CategoryFormData) {
             name="parent_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Categoría padre (opcional)</FormLabel>
+                <FormLabel>Parent category (optional)</FormLabel>
                 <Select
                   onValueChange={(value) => field.onChange(value === "0" ? null : Number(value))}
                   defaultValue={field.value != null ? field.value.toString() : "0"}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona una categoría padre" />
+                      <SelectValue placeholder="Select parent category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="0">Sin categoría padre</SelectItem>
+                    <SelectItem value="0">Parent not selected</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category.id} value={category.id.toString()}>
                         {category.name}

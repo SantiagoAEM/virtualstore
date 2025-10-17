@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button"
 import {
   ColumnDef,
+  SortingState,
+  getSortedRowModel,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -18,51 +20,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { router } from "@inertiajs/react";
 import { Input } from "@/components/ui/input"
-import React from "react";
+import * as React from "react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  nextpageurl: string | null | undefined;
-  prevpageurl: string | null | undefined;
-  currentPage: number;
-  lastPage: number;
-  basePath: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
-  nextpageurl,
-  prevpageurl,
-  basePath,
-  lastPage,
-  currentPage,
-
+  data
 }: DataTableProps<TData, TValue>) {
-   const [columnFilters, setColumnFilters] = 
-    React.useState<ColumnFiltersState>(
-    []
-    )
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: getPaginationRowModel(), // Paginación en cliente
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
+      sorting,
     },
   })
 
   return (
-   <div>
-       <div className="flex justify-end py-4">
+    <div>
+      {/* Filtro por nombre */}
+      <div className="flex justify-end py-4">
         <Input
-          placeholder="Filter by name..."
+          placeholder="Search by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -70,86 +63,72 @@ export function DataTable<TData, TValue>({
           className="w-full max-w-sm"
         />
       </div>
+
+      {/* Tabla */}
       <div className="overflow-hidden rounded-md border">
         <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                   </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div> 
-   <div className="flex items-center justify-end space-x-2 py-4 flex-wrap">
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={() => prevpageurl ? router.visit(prevpageurl) : null}
-    disabled={!prevpageurl}
-  >
-    Previous
-  </Button>
+            ))}
+          </TableHeader>
 
-  {/* Números de página */}
-  {Array.from({ length: lastPage }, (_, index) => {
-    const page = index + 1;
-    const pageUrl = `${basePath}?page=${page}`;
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
-    return (
-      <Button
-        key={page}
-        variant={currentPage === page ? "default" : "outline"}
-        size="sm"
-        onClick={() => router.visit(pageUrl)}
-      >
-        {page}
-      </Button>
-    );
-  })}
+      {/* Controles de paginación react-table */}
+      <div className="flex items-center justify-end space-x-2 py-4 flex-wrap">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
 
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={() => nextpageurl ? router.visit(nextpageurl) : null}
-    disabled={!nextpageurl}
-  >
-    Next
-  </Button>
-</div>
+        <span className="text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   )
 }
