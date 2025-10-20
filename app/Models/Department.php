@@ -15,6 +15,10 @@ class Department extends Model
         'active',
     ];
 
+    protected $casts = [
+    'active' => 'boolean',
+];
+
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);

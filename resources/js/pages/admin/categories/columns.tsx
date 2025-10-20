@@ -23,6 +23,7 @@ export type Category = {
   department_id: number
   parent_id: number | null
   active: boolean
+  children_count: number
   department?: {
     id: number
     name: string
@@ -34,7 +35,9 @@ export type Category = {
 }
 
 function DepartmentActions({ categoryItem }: { categoryItem: Category }) {
+
   const [openDialog, setOpenDialog] = useState(false);
+  const isParentCategory = categoryItem.children_count > 0;
 
   const handleConfirmDelete = () => {
     router.delete(`/categories/${categoryItem.id}`, {
@@ -68,11 +71,14 @@ function DepartmentActions({ categoryItem }: { categoryItem: Category }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <ConfirmDelete
+ <ConfirmDelete
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar departamento?"
-        description={`Esta acción eliminará el departamento "${categoryItem.name}".`}
+        title={isParentCategory ? "¿You are trying to delete a parent category?" : "¿Delete category?"}
+        description={
+          isParentCategory
+            ? `This is a parent category with subcategories related. This action will setup all the subcategories to null`
+            : `This action will delete: "${categoryItem.name}".`
+        }
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}      
       />

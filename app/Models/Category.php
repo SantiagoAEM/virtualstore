@@ -16,6 +16,10 @@ class Category extends Model
         'active',
     ];
 
+    protected $casts = [
+    'active' => 'boolean',
+];
+
 public function department()
 {
     return $this->belongsTo(Department::class);
@@ -25,4 +29,10 @@ public function parent()
 {
     return $this->belongsTo(Category::class, 'parent_id');
 }
+
+public function children()
+{
+    return $this->hasMany(Category::class,'parent_id');
+}
+
 }

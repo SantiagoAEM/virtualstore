@@ -20,8 +20,8 @@ interface ConfirmDeleteProps {
 }
 
 export default function ConfirmDelete({
-  title = "¿Estás seguro?",
-  description = "Esta acción no se puede deshacer.",
+  title = "",
+  description = "",
   onConfirm,
   openDialog,
   setOpenDialog,
@@ -34,14 +34,14 @@ export default function ConfirmDelete({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setOpenDialog(false)}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction
+          <AlertDialogCancel onClick={() => setOpenDialog(false)}>Cancel</AlertDialogCancel>
+          <AlertDialogAction  
             onClick={() => {
               onConfirm();
               setOpenDialog(false);
             }}
           >
-            Eliminar
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -16,6 +16,7 @@ class CategoryController extends Controller
 public function index()
 {
     $allCategories = Category::with(['department', 'parent'])
+        ->withCount('children') //Cuenta cuantas categorias tienen el mismo id(subcategorias)
         ->orderBy('name')
         ->get();
 
@@ -36,7 +37,7 @@ private function organizeCategories($categories)
     foreach ($grouped[null] ?? [] as $parent) {
         $sorted->push($parent);
 
-        // Luego los hijos
+        // Luego los hijos se agrupan
         foreach ($grouped[$parent->id] ?? [] as $child) {
             $sorted->push($child);
         }
@@ -62,7 +63,7 @@ private function organizeCategories($categories)
     {
         $data = $request->all();
 
-    // ⚠️ Convertir antes de validar
+    // Convertir antes de validar
     if (isset($data['parent_id']) && $data['parent_id'] == 0) {
         $data['parent_id'] = null;
     }
@@ -76,7 +77,7 @@ private function organizeCategories($categories)
 
     Category::create($validated);
 
-    return redirect()->route('categories.index');
+    return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -92,7 +93,9 @@ private function organizeCategories($categories)
      */
     public function edit(Category $category)
     {
-        //
+        $departments = Department::all();
+        $categories = Category::all();
+        return inertia('admin/categories/edit',compact('category', 'categories', 'departments'));
     }
 
     /**
@@ -100,7 +103,16 @@ private function organizeCategories($categories)
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request-> validate([
+            'name' => 'required|string|min:3',
+            'active' => 'boolean',
+            'parent_id' => 'nullable|integer|exists:categories,id',
+            'department_id' => 'integer',
+        ]);
+
+        $category->update($data);
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -108,6 +120,8 @@ private function organizeCategories($categories)
      */
     public function destroy(Category $category)
     {
+         // Pasa parent_id a null en todos los hijos de esta categoría
+         Category::where('parent_id', $category->id)->update(['parent_id' => null]);
          $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
