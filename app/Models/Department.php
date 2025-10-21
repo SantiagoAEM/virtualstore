@@ -20,12 +20,6 @@ class Department extends Model
     'active' => 'boolean',
 ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
-    }
-
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
