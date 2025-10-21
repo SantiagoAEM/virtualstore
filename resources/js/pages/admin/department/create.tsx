@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Switch } from '@/components/ui/switch';
 import React from 'react';
+import { useSlugGenerator } from '@/hooks/slugAutomatico';
 
 
 
@@ -46,15 +47,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Función para generar el slug
-function generateSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
 
 export default function Create() {
   
@@ -70,15 +62,7 @@ export default function Create() {
     },
   });
 
-// Observar cambios en el campo name para generar slug automáticamente
-  const watchName = form.watch('name');
-
-  // Generar slug automáticamente cuando cambia el nombre
-  React.useEffect(() => {
-    if (watchName) {
-      form.setValue('slug', generateSlug(watchName));
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchName]);
+ useSlugGenerator(form);
 
 
   function onSubmit(values: DepartmentFormData) {
@@ -87,7 +71,7 @@ export default function Create() {
       
       },
       onError: (errors) => {
-        // Puede pasar los errores al hook de react-hook-form
+        //  Pasa errores al hook de react-hook-form
         Object.entries(errors).forEach(([key, value]) => {
           form.setError(key as keyof DepartmentFormData, {
             message: value as string,
