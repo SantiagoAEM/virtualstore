@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,8 +28,17 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     ->middleware(['verified'])
     ->names('categories');
 
+  
+
 });
 
+Route::middleware(['auth', 'role:Vendor|Admin'])->group(function () {
+    
+    Route::resource('products', ProductController::class)
+    ->middleware(['verified'])
+    ->names('products');
+
+});
 
 
 

@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react'
-
-import { Head, Link, usePage, } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { DataTable } from './data-table';
 import { columns, Department } from './columns';
 import { PackagePlus } from 'lucide-react';
@@ -9,7 +7,7 @@ import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
 import { Toaster } from '@/components/ui/sonner';
-import { toast } from 'sonner';
+import { useFlashToast } from '@/hooks/UseFlashToast';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,23 +21,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
-interface PageProps {
-  flash?: {
-    success?: string;
-    error?: string;
-  };
-  [key: string]: unknown; 
-}
-
 export default function Index({ departments }: { departments: Department[] }) {
-const { props } = usePage<PageProps>();
-
-  useEffect(() => {
-    if (props.flash?.success) {
-      toast(props.flash.success);
-    }
-  }, [props.flash?.success]);
+useFlashToast();
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
