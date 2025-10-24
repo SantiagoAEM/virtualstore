@@ -28,6 +28,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Product } from "./columns";
 import { Category } from "@/pages/admin/categories/columns";
 import { Department } from "@/pages/admin/department/columns";
+import { EmptyOutline } from "@/components/empty-image";
+
 
 
 
@@ -113,9 +115,10 @@ function onSubmit(values: ProductFormData) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
         <Head title="Product create" />
-        <div className="container mx-auto p-3">
+        <div className="container mx-auto space-y-6 p-2">
+         <EmptyOutline/>
             <Form {...form}>
-       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-2">
         
         <div className="grid grid-cols-2 gap-4">
             <FormField
