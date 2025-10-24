@@ -52,7 +52,11 @@ interface Category {
 export const categorySchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
   parent_id: z.number().nonnegative().optional(),
-  department_id: z.number(),
+  department_id: z.coerce
+    .number()
+    .refine((val) => val > 0, {
+      message: "Seleccione el departamento",
+    }),
   active: z.boolean(),
 })
 export type CategoryFormData = z.infer<typeof categorySchema>
@@ -75,7 +79,7 @@ function onSubmit(values: CategoryFormData) {
     });
   }
 
-     const form = useForm<CategoryFormData>({
+    const form = useForm({
         resolver: zodResolver(categorySchema),
         defaultValues: {
         name: '',

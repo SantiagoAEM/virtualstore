@@ -14,6 +14,7 @@ import z from 'zod'
 import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
 import { Switch } from '@/components/ui/switch'
+import { useSlugGenerator } from '@/hooks/slugAutomatico'
 
 export const departmentSchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
@@ -53,7 +54,8 @@ const form = useForm<DepartmentFormData>({
       active:department?.active??false
     },
   });
-
+  useSlugGenerator(form,'name','slug');
+  
 const onSubmit = (data: DepartmentFormData) => {
     router.put(`/department/${department.id}`, data, {
       preserveScroll: true,

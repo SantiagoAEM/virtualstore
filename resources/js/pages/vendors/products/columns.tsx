@@ -90,10 +90,20 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    cell:({row}) =>(
+    <div className="max-w-[200px] truncate" title={row.original.title}>
+      {row.original.title}
+    </div>
+  ),
   },
   {
     accessorKey: "slug",
     header: "Slug",
+    cell:({row}) =>(
+      <div className="max-w-[200px] truncate" title={row.original.slug}>
+        {row.original.slug}
+      </div>
+    )
   },
   {
     accessorKey: "department_id",
@@ -115,7 +125,12 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "description",
-    header: "Description",
+      header: "Description",
+  cell: ({ row }) => (
+    <div className="max-w-[250px] truncate" title={row.original.description}>
+      {row.original.description}
+    </div>
+  ),
   },
     {
     accessorKey: "price",

@@ -27,6 +27,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 
 
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -84,8 +85,9 @@ function onSubmit(values: CategoryFormData) {
         
     },
   });
-
+ 
   return (
+
     <AppLayout breadcrumbs={breadcrumbs}>
     <Head title="Category edit" />
 
