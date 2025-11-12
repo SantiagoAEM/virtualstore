@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+  
     /**
      * Display a listing of the resource.
      */
@@ -80,7 +81,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-            $product->load(['department', 'category']);
+            $product->load(['department', 'category','colors.images']);
             $departments = Department::all();
             $categories = Category::all();
         return inertia('vendors/products/edit',compact('product','categories','departments'));
