@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\ProductVariationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,9 +15,9 @@ Route::get('/', function () {
     return Inertia::render('home');
 })->name('home'); 
 
+
+
 Route::middleware(['auth', 'role:Admin'])->group(function () {
-
-
 
     Route::get('/dashboard',function () {
         return Inertia::render('dashboard');
@@ -35,17 +36,27 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:Vendor|Admin'])->group(function () {
-    Route::post('/products/product-images/{image}/set-main', [ProductImageController::class, 'setMainImage'])
-    ->name('product-images.set-main');
-    Route::post('/products/product-colors/{color}/images', [ProductImageController::class, 'upload'])->name('product.images.upload');
-    Route::post('/products/product-images/{image}/main', [ProductImageController::class, 'setMainImage'])->name('product.images.main');
-    Route::delete('/products/product-images/{image}', [ProductImageController::class, 'destroy'])->name('product.images.destroy');
- 
 
-    Route::post('/products/{product}/colors', [ProductColorController::class, 'store'])
-        ->name('product.colors.store');
-    Route::delete('products/product-colors/{color}', [ProductColorController::class, 'destroy'])
-        ->name('product.colors.destroy');
+       // Variaciones (color, tamaño, estilo, tipo)
+        Route::post('/products/{product}/variations', [ProductVariationController::class, 'store'])
+            ->name('products.variations.store');
+
+        Route::put('/products/variations/{variation}', [ProductVariationController::class, 'update']);
+
+        Route::delete('/products/variations/{variation}', [ProductVariationController::class, 'destroy'])
+            ->name('products.variations.destroy');
+
+        //  Imágenes de variaciones de productos
+        Route::post('/products/variations/{variation}/images', [ProductImageController::class, 'upload'])
+            ->name('products.variations.images.upload');
+
+        Route::delete('/products/images/{image}', [ProductImageController::class, 'destroy'])
+            ->name('products.images.destroy');
+
+        Route::post('/products/product-images/{image}/set-main', [ProductImageController::class, 'setMainImage'])
+            ->name('products.images.set-main');
+            
+            
 
     Route::resource('products', ProductController::class)
     ->middleware(['verified'])

@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { Input } from './ui/input';
 
 interface Props {
-    colorId: number;
+    variationId: number;
 }
 
 export const uploadSchema = z.object({
@@ -31,7 +31,7 @@ export const uploadSchema = z.object({
 
 export type ImageFormData = z.infer<typeof uploadSchema>;
 
-export default function ImageUploadForm({ colorId }: Props) {
+export default function ImageUploadForm({ variationId}: Props) {
     const [loading, setLoading] = useState(false);
 
     const form = useForm<ImageFormData>({
@@ -47,7 +47,7 @@ export default function ImageUploadForm({ colorId }: Props) {
         const formData = new FormData();
         values.images.forEach((file) => formData.append('images[]', file));
 
-        router.post(`/products/product-colors/${colorId}/images`, formData, {
+        router.post(`/products/variations/${variationId}/images`, formData, {
             forceFormData: true, // Asegura que se envíe como FormData
             onSuccess: () => {
                 setLoading(false);
@@ -65,7 +65,10 @@ export default function ImageUploadForm({ colorId }: Props) {
         });
     }
     return (
+        <div>
+
         <Form {...form}>
+            
             <form
                 onSubmit={form.handleSubmit(handleUploadImage)}
                 className="flex items-center gap-4"
@@ -99,5 +102,6 @@ export default function ImageUploadForm({ colorId }: Props) {
                 </Button>
             </form>
         </Form>
+        </div>
     );
 }

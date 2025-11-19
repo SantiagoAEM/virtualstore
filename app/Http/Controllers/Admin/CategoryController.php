@@ -77,7 +77,7 @@ private function organizeCategories($categories)
 
     Category::create($validated);
 
-    return redirect()->route('categories.index')->with('success', 'Category created successfully');
+    return redirect()->route('categories.index')->with('success', 'Categoria creada correctamente');
     }
 
     /**
@@ -112,7 +112,7 @@ private function organizeCategories($categories)
 
         $category->update($data);
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
+        return redirect()->route('categories.index')->with('success', 'Categoria actualizada correctamente');
     }
 
     /**
@@ -124,6 +124,6 @@ private function organizeCategories($categories)
          Category::where('parent_id', $category->id)->update(['parent_id' => null]);
          $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
+        return redirect()->route('categories.index')->with('success', 'Categoria eliminada correctamente');
     }
 }

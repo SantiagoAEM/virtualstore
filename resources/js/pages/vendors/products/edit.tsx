@@ -1,6 +1,8 @@
-import ProductGallery from '@/components/ProductGallery';
+import ProductGallery, {
+    VariationWithImages,
+} from '@/components/ProductGallery';
 import ImageUploadForm from '@/components/image-upload-form';
-import ProductColorForm from '@/components/product-color-form';
+import ProductVariationForm from '@/components/product-variation-form';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -18,8 +20,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Toaster } from '@/components/ui/sonner';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import { useFlashToast } from '@/hooks/UseFlashToast';
 import AppLayout from '@/layouts/app-layout';
 import { Category } from '@/pages/admin/categories/columns';
 import { Department } from '@/pages/admin/department/columns';
@@ -50,7 +54,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface EditProps {
     categories: Category[];
     departments: Department[];
-    product: Product;
+    product: Product & { variations: VariationWithImages[] };
 }
 
 export const productSchema = z.object({
@@ -72,7 +76,10 @@ export type ProductFormData = z.output<typeof productSchema> & {
 };
 
 export default function Edit({ product, categories, departments }: EditProps) {
-    const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
+    useFlashToast();
+    const [selectedVariationId, setSelectedVariationId] = useState<
+        number | null
+    >(null);
 
     function onSubmit(values: ProductFormData) {
         router.put(`/products/${product.id}`, values, {
@@ -112,66 +119,79 @@ export default function Edit({ product, categories, departments }: EditProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Product edit" />
             <div className="container mx-auto space-y-6 p-2">
-                {/* --- Color section --- */}
                 <div className="mt-8 space-y-8">
+                    {/* --- Variant section --- */}
                     <div>
                         <h2 className="mb-3 text-xl font-semibold">
-                            Product colors
+                            Product Variants
                         </h2>
-                        <ProductColorForm
+
+                        <ProductVariationForm
                             productId={product.id}
-                            colors={product.colors || []}
+                            variations={product.variations.map((v) => ({
+                                id: v.id,
+                                name: v.name,
+                                type: v.type,
+                                code: v.code,
+                                price: v.price,
+                                quantity: v.quantity,
+                                images: v.images.map((img) => img.path),
+                            }))}
                         />
+
+                        {/* --- Gallery--- */}
+                        {product.variations && product.variations.length > 0 ? (
+                            <div>
+                                <h2 className="mb-3 text-xl font-semibold">
+                                    Variant Options
+                                </h2>
+                                <ProductGallery
+                                    variations={product.variations}
+                                    onSelectVariation={(id) =>
+                                        setSelectedVariationId(id)
+                                    }
+                                />
+                                {/* Mostrar solo el formulario del variant seleccionado */}
+                                {selectedVariationId ? (
+                                    (() => {
+                                        const variation =
+                                            product.variations.find(
+                                                (v) =>
+                                                    v.id ===
+                                                    selectedVariationId,
+                                            );
+                                        if (!variation) return null;
+
+                                        return (
+                                            <div className="mt-6 rounded-md border p-4">
+                                              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Subir imagenes de: </h3>   
+                                                <p className="font-medium text-gray-700">
+                                                    
+                                                    {variation.name}(
+                                                    {variation.type})
+                                                </p>
+
+                                                <ImageUploadForm
+                                                    variationId={variation.id}
+                                                />
+                                            </div>
+                                        );
+                                    })()
+                                ) : (
+                                    <p className="text-yellow-600">
+                                        Select a variation option above to
+                                        upload its images.
+                                    </p>
+                                )}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">
+                                ⚠️ This product does not have any variation. Add
+                                a new one before uploading images.
+                            </p>
+                        )}
                     </div>
-
-
-                    {/* --- Gallery--- */}
-                    {product.colors && product.colors.length > 0 ? (
-                        <div>
-                            <h2 className="mb-3 text-xl font-semibold">
-                                Galería por color
-                            </h2>
-                            <ProductGallery
-                                colors={product.colors}
-                                onSelectColor={(id) => setSelectedColorId(id)}
-                            />
-                            {/* Mostrar solo el formulario del color seleccionado */}
-                            {selectedColorId ? (
-                                (() => {
-                                    const color = product.colors.find(
-                                        (c) => c.id === selectedColorId,
-                                    );
-                                    if (!color) return null;
-
-                                    return (
-                                        <div className="mt-6 rounded-md border p-4">
-                                            <h3 className="mb-2 font-semibold">
-                                                Selected color:{' '}
-                                                {color.color_name}
-                                            </h3>
-                                            
-                                            <ImageUploadForm
-                                                colorId={color.id}
-                                            />
-                                        </div>
-                                    );
-                                })()
-                            ) : (
-                                <p className="text-gray-500">
-                                    Select a color above to upload its
-                                    images.
-                                </p>
-                            )}
-                            
-                        </div>
-                    ) : (
-                        <p className="text-gray-500">
-                            ⚠️ This product does not have any colors. Add a new
-                            color before uploading images.
-                        </p>
-                    )}
                 </div>
-
                 <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-2">
                         <Form {...form}>
@@ -430,6 +450,7 @@ export default function Edit({ product, categories, departments }: EditProps) {
                     </div>
                 </div>
             </div>
+            <Toaster />
         </AppLayout>
     );
 }

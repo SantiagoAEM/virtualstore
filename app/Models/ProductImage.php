@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductImage extends Model
 {
-     protected $fillable = ['product_color_id', 'path', 'is_main'];
+     protected $fillable = ['variation_id', 'path', 'is_main'];
 
-    public function color()
+     public function variation()
     {
-        return $this->belongsTo(ProductColor::class, 'product_color_id');
+        return $this->belongsTo(ProductVariation::class, 'variation_id');
     }
 }

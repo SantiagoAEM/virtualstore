@@ -43,7 +43,7 @@ class DepartmentController extends Controller
    
     Department::create($validated);
 
-    return redirect()->route('department.index')->with('success', 'Department created successfully');
+    return redirect()->route('department.index')->with('success', 'Departmento creado correctamente');
     }
 
     /**
@@ -81,7 +81,7 @@ class DepartmentController extends Controller
 
         $department->update($data);
 
-        return redirect()->route('department.index')->with('success', 'Deparment updated successfully');
+        return redirect()->route('department.index')->with('success', 'Deparmento actualizado correctamente');
 
     }
 
@@ -90,9 +90,17 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
+        try{
         $department->delete();
 
-        return redirect()->route('department.index')->with('success', 'Deparment deleted successfully');
+        return redirect()->route('department.index')->with('success', 'Deparmento eliminado correctamente');
 
+        }catch(\Exception $e){
+
+            return redirect()->route('department.index')
+            ->with('error', 'No puedes eliminar este departamento porque tiene categorías asociadas.
+                             Elimina o reasigna esas categorías primero.');
+
+        }
     }
 }
