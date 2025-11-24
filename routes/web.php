@@ -3,18 +3,23 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProductColorController;
+use App\Http\Controllers\Frontend\ProductResourceController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariationController;
+use App\Http\Resources\ProductDetailResource;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return Inertia::render('home');
-})->name('home'); 
+})->name('home');  */
 
+Route::get('/', [ProductResourceController::class, 'home'])
+    ->name('home');
+Route::get('/product/{product:slug}', [ProductResourceController::class, 'show'])
+    ->name('product.show');
 
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {

@@ -41,3 +41,28 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export type Product = {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    price: number;
+    image: string;
+    user:{
+        id:number;
+        name:string;
+    };
+    department:{
+        id:number;
+        name:string;
+    };
+};
+
+export type PaginationProps<T> = {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+};
