@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Frontend\ProductResourceController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariationController;
-use App\Http\Resources\ProductDetailResource;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,7 +18,13 @@ use Inertia\Inertia;
 Route::get('/', [ProductResourceController::class, 'home'])
     ->name('home');
 Route::get('/product/{product:slug}', [ProductResourceController::class, 'show'])
-    ->name('product.show');
+    ->name('product.show'); 
+
+Route::get('/product/{product:slug}/v/{variationSlug}', [ProductResourceController::class, 'show'])
+    ->name('product.show.variation');
+
+Route::post('/cart/store/{product}', function(){
+})->name('cart.store');
 
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {

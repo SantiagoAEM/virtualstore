@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title',2000);
             $table->string('slug',2000);
             $table->longText('description');
+            $table->string('short_description',4000)->nullable();
             $table->foreignId('department_id')
             ->index()
             ->constrained('departments');

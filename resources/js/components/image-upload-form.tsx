@@ -65,7 +65,7 @@ export default function ImageUploadForm({ variationId}: Props) {
         });
     }
     return (
-        <div>
+        <div> 
 
         <Form {...form}>
             

@@ -38,10 +38,6 @@ class Product extends Model
         return $this->hasMany(ProductVariation::class);
     }
 
-    public function colors()
-    {
-        return $this->variations()->where('type', 'color');
-    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -42,13 +42,34 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
+export type image = {
+    id: number;
+    thumbnail: string;
+    url: string;
+    is_main: boolean;
+};
+
+export type ProductVariation = {
+    id: number;
+    slug: string;
+    name: string;
+    type: string;
+    code: string;
+    price: number;
+    quantity: number;
+    images: image[];
+};
+
 export type Product = {
     id: number;
     title: string;
     slug: string;
     description: string;
+    short_description: string;
+    quantity: number;
     price: number;
     image: string;
+    images: image[];
     user:{
         id:number;
         name:string;
@@ -57,7 +78,10 @@ export type Product = {
         id:number;
         name:string;
     };
+    variations: ProductVariation[];
+
 };
+    
 
 export type PaginationProps<T> = {
     data: T[];

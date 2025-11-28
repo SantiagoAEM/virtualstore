@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ProductVariation extends Model
 {
@@ -25,4 +26,10 @@ class ProductVariation extends Model
         return $this->hasMany(ProductImage::class, 'variation_id');
     }
 
+    public function getSlugAttribute()
+{
+    return Str::slug($this->name);
 }
+
+}
+ 

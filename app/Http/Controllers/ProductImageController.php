@@ -10,48 +10,64 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+// Ya no necesitamos WebpEncoder, lo eliminamos si no se usa en otro lugar
+// use Intervention\Image\Encoders\WebpEncoder; 
 
-class ProductImageController extends Controller
+class ProductImageController extends Controller 
 {
     public function upload(Request $request, ProductVariation $variation)
     {
         $request->validate([
-            'images.*' => 'required|image|max:2048',
+            'images.*' => 'required|image|max:10240', // Máximo 10MB por imagen
         ]);
 
-        // Crear instancia del ImageManager con el driver deseado
         $manager = new ImageManager(new Driver());
 
         $productName = $variation->product->title ?? 'product';
         $productSlug = Str::slug($productName);
         
-        // Crear slug de la variante (nombre + tipo)
         $variationSlug = Str::slug($variation->name . '-' . $variation->type);
 
-        // Verificar si ya existen imágenes para esta variación
         $existingImagesCount = ProductImage::where('variation_id', $variation->id)->count();
         $isFirstImage = $existingImagesCount === 0;
 
-        foreach ($request->file('images') as $index => $file) {
-            // Leer y procesar la imagen
-            $image = $manager->read($file);
-            
-            // Redimensionar manteniendo proporción (cover fit)
-            $image->cover(800, 800);
-            
-            // Codificar a WebP con calidad 90
-            $encoded = $image->toWebp(quality: 90);
+        $finalSize = 2000; 
+        $thumbSize = 300;
 
-            // Estructura: products/{product-slug}/{variation-slug}/imagen.webp
-            $path = 'products/' . $productSlug . '/' . $variationSlug . '/' . uniqid() . '.webp';
+        foreach ($request->file('images') as $index => $file) {
+            $uniqueId = uniqid();
+
+            //      IMAGEN PRINCIPAL
+            $image = $manager->read($file);
+            $image = $this->makeSquareWithWhiteBackground($image, $finalSize);
+            $image->sharpen(10);
+            $image->cover($finalSize, $finalSize);
+
+            // 💡 SOLUCIÓN: Usar toWebp() con solo la calidad (int)
+            $encoded = $image->toWebp(82); // Calidad 82
+
+            $path = "products/{$productSlug}/{$variationSlug}/{$uniqueId}.webp";
             Storage::disk('public')->put($path, (string) $encoded);
 
-            // La primera imagen subida será marcada como principal
+            //         THUMBNAIL
+            $thumbnail = $manager->read($file);
+            $thumbnail = $this->makeSquareWithWhiteBackground($thumbnail, $thumbSize);
+            $thumbnail->sharpen(8);
+            $thumbnail->cover($thumbSize, $thumbSize);
+
+       
+            $thumbEncoded = $thumbnail->toWebp(78); // Calidad 78
+
+            $thumbnailPath = "products/{$productSlug}/{$variationSlug}/{$uniqueId}_thumb.webp";
+            Storage::disk('public')->put($thumbnailPath, (string) $thumbEncoded);
+
+            //     GUARDAR EN BASE
             $isMain = $isFirstImage && $index === 0;
 
             ProductImage::create([
                 'variation_id' => $variation->id,
                 'path' => $path,
+                'thumbnail_path' => $thumbnailPath,
                 'is_main' => $isMain,
             ]);
         }
@@ -59,13 +75,25 @@ class ProductImageController extends Controller
         return back()->with('success', 'Imágenes subidas correctamente.');
     }
 
+    private function makeSquareWithWhiteBackground($image, $size)
+    {
+        $width = $image->width();
+        $height = $image->height();
+        $maxSide = max($width, $height);
+
+        $canvas = (new ImageManager(new Driver()))
+            ->create($maxSide, $maxSide, '#FFFFFF');
+
+        $canvas->place($image, 'center');
+        $canvas->resize($size, $size);
+
+        return $canvas;
+    }
+
     public function setMainImage(ProductImage $image)
     {
-        // Quitar is_main de todas las imágenes de la misma variación
         ProductImage::where('variation_id', $image->variation_id)
             ->update(['is_main' => false]);
-
-        // Marcar la imagen seleccionada como principal
         $image->update(['is_main' => true]);
 
         return back()->with('success', 'Imagen principal actualizada.');
@@ -73,17 +101,13 @@ class ProductImageController extends Controller
 
     public function destroy(ProductImage $image)
     {
-        // Guardar información antes de eliminar
         $variationId = $image->variation_id;
         $wasMain = $image->is_main;
 
-        // Eliminar archivo físico
         Storage::disk('public')->delete($image->path);
-        
-        // Eliminar registro de la base de datos
+        Storage::disk('public')->delete($image->thumbnail_path); 
         $image->delete();
 
-        // Si era la imagen principal, marcar la siguiente imagen como principal
         if ($wasMain) {
             $nextImage = ProductImage::where('variation_id', $variationId)->first();
             if ($nextImage) {
