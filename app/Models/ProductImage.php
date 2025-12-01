@@ -24,6 +24,9 @@ class ProductImage extends Model
         return $this->thumbnail_path ? asset('storage/' . $this->thumbnail_path) : $this->url;
     }
 
-    
+    public function mainImage()
+{
+    return $this->hasOne(ProductImage::class)->where('is_main', true);
+}
 }
   

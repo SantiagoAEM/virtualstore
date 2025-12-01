@@ -14,6 +14,15 @@ class ProductListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        //Obtiene la imagen principal carcada como (main) 
+        $defaultVariation = $this->variations->first();
+        $mainImage = $defaultVariation?->images->firstWhere('is_main', true)
+            ?? $defaultVariation?->images->first();
+        $imageUrl = $mainImage
+            ? asset('storage/' . $mainImage->path)
+            // si no hay imagenes cargadas toma el placeholder.png
+            : asset('images/placeholder.png');
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -22,9 +31,7 @@ class ProductListResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'status' => $this->status,
-            'image' => asset('storage/' . $this->variations?->
-                            first()?->images?->first()?->path)
-                            ?? asset('images/placeholder.png'),
+            'image' => $imageUrl,
             'department' => $this->whenLoaded('department', function () {
                 return [
                     'id' => $this->department->id,

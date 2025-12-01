@@ -122,25 +122,29 @@ export default function Show() {
                             />
                         </div>
 
-                        {/* DISPONIBILIDAD */}
+                        {/* AVAILABLE*/}
                         <p className="text-gray-500">
                             Disponibles: {selectedVariation.quantity} unidad
                             {selectedVariation.quantity !== 1 ? 'es' : ''}
                         </p>
                         <div className="mt-6">
+                            {/* SHOP CART*/}
                             <BuyButton
-                                onClick={() =>
-                                    console.log(
-                                        'Comprar',
-                                        selectedVariation.id,
-                                        quantity,
-                                    )
-                                }
-                                disabled={selectedVariation.quantity === 0} // deshabilita si no hay stock
+                            onClick={() => console.log('Comprar', selectedVariation.id)}
+                            // deshabilita si no hay stock
+                            disabled={selectedVariation.quantity === 0}
+                            tooltip={selectedVariation.quantity === 0 ? 'No stock' : undefined} 
                             />
                         </div>
+
                     </div>
+                    
                 </div>
+
+                        <div
+className="prose prose-slate lg:prose-lg max-w-none mt-8"
+    dangerouslySetInnerHTML={{ __html: product.description }}
+></div>
             </div>
         </div>
     );

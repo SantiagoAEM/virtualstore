@@ -13,14 +13,14 @@ class ProductResourceController extends Controller
     public function home()
     {
         $products = ProductListResource::collection(
-            Product::with(['department', 'user'])->paginate(12)
+            Product::with(['department', 'user','variations.images'])
+            ->where('status', 'published')
+            ->paginate(12)
         );
         return inertia('home', compact('products'));
     }
     public function show(Request $request, Product $product, $variationSlug = null)
     {
-      /*   $variationId = $request->query('variation'); */
-
         $product->load('variations.images');
 
          // Buscar variación por slug

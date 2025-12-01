@@ -1,4 +1,6 @@
+
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @plugin 'tailwindcss-animate';
 
@@ -130,6 +132,73 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* Estilos personalizados para las listas en prose */
+.prose ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+}
+
+.prose ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+}
+
+.prose li {
+    display: list-item !important;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.prose li p {
+    display: inline;
+    margin: 0;
+}
+
+/* Asegura que las viñetas se vean */
+.prose ul li::marker {
+    color: rgb(75, 85, 99);
+}
+
+.prose ol li::marker {
+    color: rgb(75, 85, 99);
+    font-weight: 600;
+}
+
+/* Estilos adicionales para imágenes y títulos */
+.prose img {
+    border-radius: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.prose h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.prose strong {
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+}
+
+.prose a {
+    color: rgb(37, 99, 235);
+    text-decoration: underline;
+}
+
+.prose a:hover {
+    color: rgb(29, 78, 216);
 }
 
 @layer base {

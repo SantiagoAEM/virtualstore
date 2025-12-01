@@ -3,6 +3,7 @@ import ProductGallery, {
 } from '@/components/ProductGallery';
 import ImageUploadForm from '@/components/image-upload-form';
 import ProductVariationForm from '@/components/product-variation-form';
+import TiptapEditor from '@/components/tiptap-editor';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -22,7 +23,6 @@ import {
 } from '@/components/ui/select';
 import { Toaster } from '@/components/ui/sonner';
 import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 import { useFlashToast } from '@/hooks/UseFlashToast';
 import AppLayout from '@/layouts/app-layout';
 import { Category } from '@/pages/admin/categories/columns';
@@ -164,9 +164,10 @@ export default function Edit({ product, categories, departments }: EditProps) {
 
                                         return (
                                             <div className="mt-6 rounded-md border p-4">
-                                              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Subir imagenes de: </h3>   
+                                                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                                                    Subir imagenes de:{' '}
+                                                </h3>
                                                 <p className="font-medium text-gray-700">
-                                                    
                                                     {variation.name}(
                                                     {variation.type})
                                                 </p>
@@ -338,24 +339,32 @@ export default function Edit({ product, categories, departments }: EditProps) {
                                     />
                                 </div>
 
+                                {/*  Tiptap  */}
                                 <FormField
                                     control={form.control}
                                     name="description"
-                                    render={({ field }) => (
+                                    render={({ field, fieldState }) => (
                                         <FormItem>
                                             <FormLabel>Description</FormLabel>
-                                            <FormControl>
-                                                <Textarea
-                                                    id="description"
-                                                    placeholder="Describe a product"
-                                                    className="min-h-[100px] resize-none sm:min-w-[300px]"
-                                                    {...field}
-                                                ></Textarea>
-                                            </FormControl>
+
+                                            <TiptapEditor
+                                                value={field.value}
+                                                onChange={(html) =>
+                                                    form.setValue(
+                                                        'description',
+                                                        html,
+                                                    )
+                                                }
+                                                error={
+                                                    fieldState.error?.message
+                                                }
+                                            />
+
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField
                                         control={form.control}
