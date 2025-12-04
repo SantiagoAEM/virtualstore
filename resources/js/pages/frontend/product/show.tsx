@@ -130,21 +130,26 @@ export default function Show() {
                         <div className="mt-6">
                             {/* SHOP CART*/}
                             <BuyButton
-                            onClick={() => console.log('Comprar', selectedVariation.id)}
-                            // deshabilita si no hay stock
-                            disabled={selectedVariation.quantity === 0}
-                            tooltip={selectedVariation.quantity === 0 ? 'No stock' : undefined} 
+                                onClick={() =>
+                                    console.log('Comprar', selectedVariation.id)
+                                }
+                                // deshabilita si no hay stock
+                                disabled={selectedVariation.quantity === 0}
+                                tooltip={
+                                    selectedVariation.quantity === 0
+                                        ? 'No stock'
+                                        : undefined
+                                }
                             />
                         </div>
-
                     </div>
-                    
                 </div>
-
-                        <div
-className="prose prose-slate lg:prose-lg max-w-none mt-8"
-    dangerouslySetInnerHTML={{ __html: product.description }}
-></div>
+                <div>Acerca de este articulo:
+                    <div
+                        className="prose mt-8 max-w-none prose-slate lg:prose-lg"
+                        dangerouslySetInnerHTML={{ __html: product.description }}
+                    ></div>
+                </div>
             </div>
         </div>
     );
