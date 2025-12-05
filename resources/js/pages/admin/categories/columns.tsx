@@ -73,11 +73,11 @@ function DepartmentActions({ categoryItem }: { categoryItem: Category }) {
       </DropdownMenu>
  <ConfirmDelete
         onConfirm={handleConfirmDelete}
-        title={isParentCategory ? "¿You are trying to delete a parent category?" : "¿Delete category?"}
+        title={isParentCategory ? "¿Estas eliminando una categoria padre?" : "¿Eliminar categoria?"}
         description={
           isParentCategory
-            ? `This is a parent category with subcategories related. This action will setup all the subcategories to null`
-            : `This action will delete: "${categoryItem.name}".`
+            ? `Esta categoria padre tiene subcategorias relacionadas. Esta accion cambiara las subcategorias a null. ¿Deseas continuar?`
+            : `Esta acción eliminará: "${categoryItem.name}".`
         }
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}      

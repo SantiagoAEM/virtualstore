@@ -35,7 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 
      {
-        title: 'Category create',
+        title: 'Crear categoria',
         href: CategoryController.create().url,
     },
 ];

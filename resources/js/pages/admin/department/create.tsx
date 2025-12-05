@@ -37,11 +37,11 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
     {
-        title: 'Department',
+        title: 'Departamento',
         href: DepartmentController.index().url,
     },
      {
-        title: 'Department create',
+        title: 'Crear departamento',
         href: DepartmentController.create().url,
     },
 ];
@@ -82,7 +82,7 @@ export default function Create() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Department create" />
+      <Head title="Crear departamento" />
 
     <div className="container mx-auto p-3">
        <Form {...form}>

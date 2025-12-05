@@ -57,7 +57,7 @@ function ProductActions({ productItem }: { productItem: Product }) {
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleConfirmDelete = () => {
-        router.delete(`/products/${productItem.id}`, {
+        router.delete(products.destroy(productItem.id), {
             onSuccess: () => {
                 console.log('Eliminado');
             },
@@ -91,8 +91,8 @@ function ProductActions({ productItem }: { productItem: Product }) {
 
             <ConfirmDelete
                 onConfirm={handleConfirmDelete}
-                title="¿Eliminar departamento?"
-                description={`Esta acción eliminará el departamento "${productItem.title}".`}
+                title="¿Eliminar producto?"
+                description={`Esta acción eliminará el producto y las imagenes relacionadas"${productItem.title}".`}
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
             />

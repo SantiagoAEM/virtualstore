@@ -77,7 +77,7 @@ const onSubmit = (data: DepartmentFormData) => {
   }
   return (
        <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Department edit" />
+      <Head title="Editar departamento" />
 <Toaster />
     <div className="container mx-auto p-3">
        <Form {...form}>

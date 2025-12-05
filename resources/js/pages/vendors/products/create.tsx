@@ -34,12 +34,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
     {
-        title: 'Products',
+        title: 'Productos',
         href: ProductController.index().url,
     },
     {
-        title: 'Product create',
-        href: '/products/create',
+        title: 'Crear producto',
+        href: '#',
     },
 ];
 

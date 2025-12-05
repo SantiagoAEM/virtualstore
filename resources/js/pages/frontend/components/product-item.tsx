@@ -2,12 +2,13 @@ import { Product } from '@/types';
 import { Link } from '@inertiajs/react';
 import BuyButton from './buy-button';
 import CurrencyFormatter from './currency-formatter';
+import ProductResourceController from '@/actions/App/Http/Controllers/Frontend/ProductResourceController';
 
 export default function ProductItem({ product }: { product: Product }) {
     return (
         <div className="card bg-base-100 shadow-xl">
             <div className="relative">
-                <Link href={`/product/${product.slug}`}>
+                <Link href={ProductResourceController.show['/product/{product}'].url(product.slug )}>
                     <figure>
                         <img
                             src={product.image}

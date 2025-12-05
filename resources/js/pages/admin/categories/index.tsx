@@ -17,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
         {
-        title: 'Categories',
+        title: 'Categorias',
         href: CategoryController.index().url,
         
     },

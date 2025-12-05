@@ -19,8 +19,8 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
         {
-        title: 'Products',
-        href: '/vendors/products',
+        title: 'Productos',
+        href: '#',
         
     },
 ];

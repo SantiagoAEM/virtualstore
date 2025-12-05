@@ -7,14 +7,15 @@ import CurrencyFormatter from '../components/currency-formatter';
 import ShopFrontLayout from '@/layouts/shop-front-layout';
 import ProductResourceController from '@/actions/App/Http/Controllers/Frontend/ProductResourceController';
 
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Home',
+        title: 'Inicio',
         href:  ProductResourceController.home.url(),
     },
         {
-        title: 'Products',
-        href: '',
+        title: 'Detalles del producto',
+        href: '#',
         
     },
 ];

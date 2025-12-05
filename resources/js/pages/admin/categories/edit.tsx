@@ -35,12 +35,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
     {
-        title: 'Categories',
+        title: 'Categorias',
         href: CategoryController.index().url,
     },
     {
-        title: 'Categories edit',
-        href: '/Categories/edit',
+        title: 'Editar categoria',
+        href: '#',
     },
 ];
 
@@ -90,7 +90,7 @@ function onSubmit(values: CategoryFormData) {
   return (
 
     <AppLayout breadcrumbs={breadcrumbs}>
-    <Head title="Category edit" />
+    <Head title="Editar categoria" />
 
     <div className="container mx-auto p-3">
             <Form {...form}>
