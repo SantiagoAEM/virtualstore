@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import ConfirmDelete from './ui/confirm-delete';
 import { Input } from './ui/input';
+import ProductVariationController from '@/actions/App/Http/Controllers/ProductVariationController';
 
 
 export interface ProductVariationFormData {
@@ -102,7 +103,7 @@ export default function ProductVariationForm({ productId, variations }: Props) {
 
         if (editingVariation) {
             // Actualizar 
-            router.put(`/products/variations/${editingVariation.id}`, values, {
+            router.put(ProductVariationController.update(editingVariation), values, {
                 onSuccess: () => {
                     setLoading(false);
                     handleCancelEdit();
@@ -118,7 +119,7 @@ export default function ProductVariationForm({ productId, variations }: Props) {
             });
         } else {
             // Crear 
-            router.post(`/products/${productId}/variations`, values, {
+            router.post(ProductVariationController.store(productId), values, {
                 onSuccess: () => {
                     setLoading(false);
                     form.reset();
@@ -138,7 +139,7 @@ export default function ProductVariationForm({ productId, variations }: Props) {
     const handleConfirmDelete = () => {
         if (!selectedVariation) return;
 
-        router.delete(`/products/variations/${selectedVariation.id}`, {
+        router.delete(ProductVariationController.destroy(selectedVariation.id), {
             onSuccess: () => {
                 console.log('Variación eliminada correctamente');
             },

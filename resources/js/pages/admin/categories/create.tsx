@@ -25,6 +25,7 @@ import { BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/app-layout'
 import { Head, router } from '@inertiajs/react';
 import { Department } from "../department/columns";
+import CategoryController from "@/actions/App/Http/Controllers/Admin/CategoryController";
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,13 +33,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Dashboard',
         href: dashboard().url,
     },
-    {
-        title: 'Department',
-        href: '/department',
-    },
+
      {
-        title: 'Department create',
-        href: '/deparment/create',
+        title: 'Category create',
+        href: CategoryController.create().url,
     },
 ];
 
@@ -64,7 +62,7 @@ export type CategoryFormData = z.infer<typeof categorySchema>
 export default function Create({ categories, departments }: { categories: Category[], departments:Department[]}) {
 
 function onSubmit(values: CategoryFormData) {
-    router.post('/categories', values, {
+    router.post(CategoryController.store(), values, {
       onSuccess: () => {
       
       },

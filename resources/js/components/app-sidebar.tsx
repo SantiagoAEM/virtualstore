@@ -15,6 +15,9 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, List, Store, ShoppingBag} from 'lucide-react';
 import AppLogo from './app-logo';
+import DepartmentController from '@/actions/App/Http/Controllers/Admin/DepartmentController';
+import CategoryController from '@/actions/App/Http/Controllers/Admin/CategoryController';
+import ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
 
 const mainNavItems: NavItem[] = [
     {
@@ -24,17 +27,17 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Deparment',
-        href: '/department/',
+        href: DepartmentController.index().url,
         icon: Store,
     },
     {
         title: 'Categories',
-        href: '/categories/',
+        href: CategoryController.index().url,
         icon: List,
     },
         {
         title: 'Products',
-        href: '/products/',
+        href: ProductController.index().url,
         icon: ShoppingBag,
     },
 ];

@@ -13,7 +13,7 @@ export default function Carousel({ images }: { images: image[] }) {
     return (
         <div className="flex items-start gap-6">
 
-            {/* thumbnails */}
+            {/* THUMBNAILS ---------------------------------------------------------------- */}
             <div className="flex flex-col gap-2">
                 {images.map((img, i) => (
                     <button
@@ -30,7 +30,7 @@ export default function Carousel({ images }: { images: image[] }) {
                 ))}
             </div>
 
-            {/* RIGHT: main image */}
+           {/* MAIN IMAGE ---------------------------------------------------------------- */}
             <div className="w-full">
                 <img
                     src={images[activeIndex]?.url}

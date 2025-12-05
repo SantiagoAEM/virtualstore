@@ -8,6 +8,7 @@ import { DataTable } from '../department/data-table';
 import { columns, Category } from './columns';
 import { Toaster } from '@/components/ui/sonner';
 import { useFlashToast } from '@/hooks/UseFlashToast';
+import CategoryController from '@/actions/App/Http/Controllers/Admin/CategoryController';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -17,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
         {
         title: 'Categories',
-        href: '/categories',
+        href: CategoryController.index().url,
         
     },
 ];
@@ -31,7 +32,7 @@ useFlashToast();
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Categories" />
        <div className="container mx-auto p-3">
-          <Link href='/categories/create'>
+          <Link href={CategoryController.create().url} >
             <Button  size="sm">
               <PackagePlus /> New category
             </Button>

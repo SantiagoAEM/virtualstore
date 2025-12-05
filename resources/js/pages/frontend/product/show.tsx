@@ -1,9 +1,23 @@
 import Carousel from '@/components/carousel';
-import { Product, ProductVariation } from '@/types';
+import { BreadcrumbItem, Product, ProductVariation } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import BuyButton from '../components/buy-button';
 import CurrencyFormatter from '../components/currency-formatter';
+import ShopFrontLayout from '@/layouts/shop-front-layout';
+import ProductResourceController from '@/actions/App/Http/Controllers/Frontend/ProductResourceController';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Home',
+        href:  ProductResourceController.home.url(),
+    },
+        {
+        title: 'Products',
+        href: '',
+        
+    },
+];
 
 type Props = {
     product: Product;
@@ -11,31 +25,36 @@ type Props = {
 };
 
 export default function Show() {
-    const { product, activeVariationSlug } = usePage()
-        .props as unknown as Props;
+    const { product, activeVariationSlug } = usePage().props as unknown as Props;
 
-    const initialVariation =
-        product.variations.find((v) => v.slug === activeVariationSlug) ??
-        product.variations[0];
+ 
+    // INIT VARIATION-----------------------------------------------------------
+    const initialVariation = useMemo(() => {
+        return (
+            product.variations.find((v) => v.slug === activeVariationSlug) ??
+            product.variations[0]
+        );
+    }, [product, activeVariationSlug]);
 
     const [selectedVariation, setSelectedVariation] =
         useState<ProductVariation>(initialVariation);
+
     const [quantity, setQuantity] = useState<number>(1);
-    const [images, setImages] = useState(() => arrangeImages(initialVariation));
 
-    function arrangeImages(variation: ProductVariation) {
-        const main = variation.images.find((img) => img.is_main);
-        const others = variation.images.filter((img) => !img.is_main);
-        return main ? [main, ...others] : variation.images;
-    }
 
-    useEffect(() => {
-        setImages(arrangeImages(selectedVariation));
-        setQuantity(1);
+    // IMAGES -----------------------------------------------------------------
+    const images = useMemo(() => {
+        const main = selectedVariation.images.find((img) => img.is_main);
+        const others = selectedVariation.images.filter((img) => !img.is_main);
+        return main ? [main, ...others] : selectedVariation.images;
     }, [selectedVariation]);
 
+   
+    // HANDLE VARIATION----------------------------------------------------------
     function handleVariationChange(v: ProductVariation) {
         setSelectedVariation(v);
+        setQuantity(1);
+
         router.visit(`/product/${product.slug}/v/${v.slug}`, {
             method: 'get',
             preserveScroll: true,
@@ -44,28 +63,29 @@ export default function Show() {
         });
     }
 
+
     return (
         <div>
+             <ShopFrontLayout breadcrumbs={breadcrumbs}>
             <Head title={`Virtual Store - ${product.title}`} />
 
             <div className="container mx-auto py-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+                    
+                    {/* CAROUSEL ---------------------------------------------------------------------- */}
                     <div className="col-span-7">
                         <Carousel images={images} />
                     </div>
 
+                    {/* PRODUCT INFO ---------------------------------------------------------------- */}
                     <div className="col-span-5">
-                        <h1 className="mb-4 text-3xl font-bold">
-                            {product.title}
-                        </h1>
+                        <h1 className="mb-4 text-3xl font-bold">{product.title}</h1>
 
                         <div className="mb-4 text-2xl font-semibold text-gray-800">
-                            <CurrencyFormatter
-                                amount={selectedVariation.price}
-                            />
+                            <CurrencyFormatter amount={selectedVariation.price} />
                         </div>
 
-                        {/* VARIANTS */}
+                        {/* VARIATIONS ------------------------------------------------------------------ */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-600">
                                 {selectedVariation.type}
@@ -73,18 +93,15 @@ export default function Show() {
                             <p className="mb-2 font-semibold text-gray-400">
                                 {selectedVariation.name}
                             </p>
+
                             <div className="flex gap-3">
                                 {product.variations.map((v) => {
-                                    const main =
-                                        v.images.find((img) => img.is_main) ??
-                                        v.images[0];
+                                    const main = v.images.find((img) => img.is_main) ?? v.images[0];
                                     return (
                                         <button
                                             key={v.id}
-                                            onClick={() =>
-                                                handleVariationChange(v)
-                                            }
-                                            className={`rounded-lg border p-1 ${
+                                            onClick={() => handleVariationChange(v)}
+                                            className={`rounded-lg border p-1 transition ${
                                                 selectedVariation.id === v.id
                                                     ? 'border-blue-500'
                                                     : 'border-gray-300'
@@ -100,11 +117,10 @@ export default function Show() {
                                 })}
                             </div>
                         </div>
-                        {/* QUANTITY */}
+
+                        {/* QUANTITY ------------------------------------------------------------------- */}
                         <div className="mb-4">
-                            <label className="mb-1 block font-medium">
-                                Cantidad
-                            </label>
+                            <label className="mb-1 block font-medium">Cantidad</label>
                             <input
                                 type="number"
                                 min={1}
@@ -114,43 +130,45 @@ export default function Show() {
                                     setQuantity(
                                         Math.min(
                                             Number(e.target.value),
-                                            selectedVariation.quantity,
-                                        ),
+                                            selectedVariation.quantity
+                                        )
                                     )
                                 }
                                 className="w-24 rounded border px-3 py-1"
                             />
                         </div>
 
-                        {/* AVAILABLE*/}
+                        {/* STOCK ---------------------------------------------------------------------- */}
                         <p className="text-gray-500">
                             Disponibles: {selectedVariation.quantity} unidad
                             {selectedVariation.quantity !== 1 ? 'es' : ''}
                         </p>
+
+                        {/* BUY BUTTON ----------------------------------------------------------------- */}
                         <div className="mt-6">
-                            {/* SHOP CART*/}
                             <BuyButton
                                 onClick={() =>
                                     console.log('Comprar', selectedVariation.id)
                                 }
-                                // deshabilita si no hay stock
                                 disabled={selectedVariation.quantity === 0}
-                                tooltip={
-                                    selectedVariation.quantity === 0
-                                        ? 'No stock'
-                                        : undefined
-                                }
+                                tooltip={selectedVariation.quantity === 0 ? 'No stock' : undefined}
                             />
                         </div>
                     </div>
                 </div>
-                <div>Acerca de este articulo:
+
+                {/* DESCRIPTION ---------------------------------------------------------------------- */}
+                <div className="mt-12">
+                    <h2 className="text-xl font-semibold mb-3">Acerca de este artículo:</h2>
                     <div
-                        className="prose mt-8 max-w-none prose-slate lg:prose-lg"
+                        className="prose max-w-none prose-slate lg:prose-lg"
                         dangerouslySetInnerHTML={{ __html: product.description }}
                     ></div>
                 </div>
             </div>
+            
+        </ShopFrontLayout>
         </div>
+       
     );
 }

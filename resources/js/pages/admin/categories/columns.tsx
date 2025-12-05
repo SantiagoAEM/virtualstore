@@ -40,7 +40,7 @@ function DepartmentActions({ categoryItem }: { categoryItem: Category }) {
   const isParentCategory = categoryItem.children_count > 0;
 
   const handleConfirmDelete = () => {
-    router.delete(`/categories/${categoryItem.id}`, {
+    router.delete(categories.destroy(categoryItem.id), {
       onSuccess: () => {
         console.log("Eliminado");
       },

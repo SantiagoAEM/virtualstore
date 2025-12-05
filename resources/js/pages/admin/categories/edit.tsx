@@ -25,6 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
+import CategoryController from '@/actions/App/Http/Controllers/Admin/CategoryController';
 
 
 
@@ -35,7 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Categories',
-        href: '/categories',
+        href: CategoryController.index().url,
     },
     {
         title: 'Categories edit',
@@ -60,7 +61,7 @@ interface EditProps {
 
 export default function Edit({ category, categories, departments }: EditProps) {
 function onSubmit(values: CategoryFormData) {
-    router.put(`/categories/${category.id}`, values, {
+    router.put(CategoryController.update(category.id), values, {
      preserveScroll: true,
       onSuccess: () => {
       },

@@ -14,8 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Link, router } from "@inertiajs/react"
-import department from "@/routes/department"
 import ConfirmDelete from "@/components/ui/confirm-delete"
+import DepartmentController from "@/actions/App/Http/Controllers/Admin/DepartmentController"
+
 
 export type Department = {
   id: number
@@ -30,7 +31,7 @@ function DepartmentActions({ departmentItem }: { departmentItem: Department }) {
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleConfirmDelete = () => {
-    router.delete(`/department/${departmentItem.id}`, {
+    router.delete(DepartmentController.destroy(departmentItem.id), {
       onSuccess: () => {
         console.log("Eliminado");
       },
@@ -53,7 +54,7 @@ function DepartmentActions({ departmentItem }: { departmentItem: Department }) {
         <DropdownMenuContent align="start">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link href={department.edit.url(departmentItem.id)}>
+          <Link href={DepartmentController.edit.url(departmentItem.id)}>
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </Link>
         <DropdownMenuItem onClick={() => setOpenDialog(true)}>

@@ -21,7 +21,7 @@ class ProductListResource extends JsonResource
         $imageUrl = $mainImage
             ? asset('storage/' . $mainImage->path)
             // si no hay imagenes cargadas toma el placeholder.png
-            : asset('images/placeholder.png');
+            : asset('storage/placeholder.png');
 
         return [
             'id' => $this->id,

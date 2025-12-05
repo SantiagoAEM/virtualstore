@@ -9,6 +9,7 @@ export default function home({products}:{products:PaginationProps<Product>}) {
         <div className="min-h-screen">
           <h2>welcome to Vlosthing store</h2>
           <div>
+            {/* PRODUCT SHOW ---------------------------------------------------------------- */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {products.data.map((product)=>(
                 <ProductItem product={product} key={product.id} />

@@ -8,6 +8,7 @@ import { BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
 import { Toaster } from '@/components/ui/sonner';
 import { useFlashToast } from '@/hooks/UseFlashToast';
+import department from '@/routes/department';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
         {
         title: 'Department',
-        href: '/department',
+        href: department.index().url,
         
     },
 ];
@@ -30,7 +31,7 @@ useFlashToast();
       <Head title="Department" />
 
     <div className="container mx-auto p-3">
-      <Link href='/department/create'>
+      <Link href={department.create().url}>
         <Button  size="sm">
           <PackagePlus /> New department
         </Button>

@@ -15,7 +15,7 @@ function CurrencyFormatter({
         maximumFractionDigits: 2,
     }).format(amount);
 
-    // Separamos la parte entera y la decimal
+    // Se separa la parte entera y la decimal
     const [integerPart, decimalPart] = formatted.split('.');
 
     return (

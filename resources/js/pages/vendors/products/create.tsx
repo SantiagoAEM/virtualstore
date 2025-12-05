@@ -26,6 +26,7 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
+import ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,7 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Products',
-        href: '/products',
+        href: ProductController.index().url,
     },
     {
         title: 'Product create',
@@ -75,7 +76,7 @@ export default function Create({
     departments: Department[];
 }) {
     function onSubmit(values: ProductFormData) {
-        router.post('/products', values, {
+        router.post(ProductController.store(), values, {
             onSuccess: () => {},
             onError: (errors) => {
                 // Puede pasar los errores al hook de react-hook-form

@@ -8,6 +8,7 @@ import { Head, Link} from '@inertiajs/react';
 import { PackagePlus } from 'lucide-react';
 import { columns, Product } from './columns';
 import { useFlashToast } from '@/hooks/UseFlashToast';
+import ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
 
 
 
@@ -43,7 +44,7 @@ useFlashToast();
       <Head title="Products" />
       
       <div className="container mx-auto p-3">
-       <Link href='/products/create'>
+       <Link href={ProductController.create().url} >
         <Button  size="sm">
           <PackagePlus /> New product
         </Button>

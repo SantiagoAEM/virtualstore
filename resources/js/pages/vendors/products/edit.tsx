@@ -35,6 +35,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Product } from './columns';
+import ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,7 +44,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Products',
-        href: '/products',
+        href: ProductController.index().url,
     },
     {
         title: 'Product create',
@@ -82,7 +83,7 @@ export default function Edit({ product, categories, departments }: EditProps) {
     >(null);
 
     function onSubmit(values: ProductFormData) {
-        router.put(`/products/${product.id}`, values, {
+        router.put(ProductController.update(product.id), values, {
             preserveScroll: true,
             onSuccess: () => {},
             onError: (errors) => {

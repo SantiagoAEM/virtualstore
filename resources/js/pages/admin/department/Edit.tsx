@@ -15,6 +15,8 @@ import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
 import { Switch } from '@/components/ui/switch'
 import { useSlugGenerator } from '@/hooks/slugAutomatico'
+import DepartmentController from '@/actions/App/Http/Controllers/Admin/DepartmentController'
+
 
 export const departmentSchema = z.object({
   name: z.string().min(3, 'El nombre es obligatorio y debe tener al menos 3 caracteres'),
@@ -31,11 +33,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Department',
-        href: '/department',
+        href: DepartmentController.index().url,
     },
     {
         title: 'Department edit',
-        href: '/deparment/edit',
+        href: '#',
     },
 ];
 
@@ -57,7 +59,7 @@ const form = useForm<DepartmentFormData>({
   useSlugGenerator(form,'name','slug');
   
 const onSubmit = (data: DepartmentFormData) => {
-    router.put(`/department/${department.id}`, data, {
+    router.put(DepartmentController.update(department.id), data, {
       preserveScroll: true,
       onSuccess: () => {
         // puedes mostrar un toast o redirigir

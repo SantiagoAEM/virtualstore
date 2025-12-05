@@ -16,9 +16,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Switch } from '@/components/ui/switch';
-import React from 'react';
 import { useSlugGenerator } from '@/hooks/slugAutomatico';
-
+import DepartmentController from '@/actions/App/Http/Controllers/Admin/DepartmentController';
 
 
 export const departmentSchema = z.object({
@@ -39,11 +38,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Department',
-        href: '/department',
+        href: DepartmentController.index().url,
     },
      {
         title: 'Department create',
-        href: '/department/create',
+        href: DepartmentController.create().url,
     },
 ];
 
@@ -66,7 +65,7 @@ export default function Create() {
 
 
   function onSubmit(values: DepartmentFormData) {
-    router.post('/department', values, {
+    router.post(DepartmentController.store(), values, {
       onSuccess: () => {
       
       },
