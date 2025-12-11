@@ -124,7 +124,7 @@ export default function Edit({ product, categories, departments }: EditProps) {
                     {/* --- Variant section --- */}
                     <div>
                         <h2 className="mb-3 text-xl font-semibold">
-                            Product Variants
+                            Variantes del producto
                         </h2>
 
                         <ProductVariationForm
@@ -143,8 +143,8 @@ export default function Edit({ product, categories, departments }: EditProps) {
                         {/* --- Gallery--- */}
                         {product.variations && product.variations.length > 0 ? (
                             <div>
-                                <h2 className="mb-3 text-xl font-semibold">
-                                    Variant Options
+                                <h2 className="mt-3 mb-3 text-xl font-semibold">
+                                    Opciones de variación del producto
                                 </h2>
                                 <ProductGallery
                                     variations={product.variations}
@@ -165,7 +165,7 @@ export default function Edit({ product, categories, departments }: EditProps) {
 
                                         return (
                                             <div className="mt-6 rounded-md border p-4">
-                                                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                                                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
                                                     Subir imagenes de:{' '}
                                                 </h3>
                                                 <p className="font-medium text-gray-700">

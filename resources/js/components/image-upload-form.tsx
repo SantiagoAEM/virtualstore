@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from './ui/input';
+import ProductImageController from '@/actions/App/Http/Controllers/ProductImageController';
 
 interface Props {
     variationId: number;
@@ -46,8 +47,7 @@ export default function ImageUploadForm({ variationId}: Props) {
 
         const formData = new FormData();
         values.images.forEach((file) => formData.append('images[]', file));
-
-        router.post(`/products/variations/${variationId}/images`, formData, {
+        router.post(ProductImageController.upload(variationId), formData, {
             forceFormData: true, // Asegura que se envíe como FormData
             onSuccess: () => {
                 setLoading(false);
@@ -83,6 +83,7 @@ export default function ImageUploadForm({ variationId}: Props) {
                                 <Input
                                     type="file"
                                     accept="image/*"
+                                    placeholder=''
                                     multiple
                                     onChange={(e) => {
                                         const files = e.target.files
@@ -98,7 +99,7 @@ export default function ImageUploadForm({ variationId}: Props) {
                 />
 
                 <Button type="submit" disabled={loading}>
-                    {loading ? 'Working...' : 'Upload images'}
+                    {loading ? 'Working...' : 'Subir imagenes'}
                 </Button>
             </form>
         </Form>
