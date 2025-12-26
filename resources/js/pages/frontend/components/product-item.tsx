@@ -21,9 +21,7 @@ export default function ProductItem({ product }: { product: Product }) {
         >
             <div className="group relative">
                 <Link
-                    href={ProductResourceController.show[
-                        '/product/{product}'
-                    ].url(product.slug)}
+                    href={ProductResourceController.show['/product/{product}'].url(product.slug)}
                 >
                     <figure>
                         <img
@@ -42,9 +40,7 @@ export default function ProductItem({ product }: { product: Product }) {
 
             <div className="p-4">
                 <Link
-                    href={ProductResourceController.show[
-                        '/product/{product}'
-                    ].url(product.slug)}
+                    href={ProductResourceController.show['/product/{product}'].url(product.slug)}
                 >
                     <h2 className="line-clamp-2 text-lg font-semibold">
                         {product.title}

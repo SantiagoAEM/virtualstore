@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\Frontend\ProductResourceController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariationController;
@@ -11,7 +12,7 @@ use Inertia\Inertia;
 
 
 
-
+{/* frontend products section ------------------------------------------------------------------------------------- */}
 
 Route::get('/', [ProductResourceController::class, 'home'])
     ->name('home');
@@ -21,10 +22,15 @@ Route::get('/product/{product:slug}', [ProductResourceController::class, 'show']
 Route::get('/product/{product:slug}/v/{variationSlug}', [ProductResourceController::class, 'show'])
     ->name('product.show.variation');
 
-Route::post('/cart/store/{product}', function(){
-})->name('cart.store');
+{/* Cart section ------------------------------------------------------------------------------------- */}
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'index')->name('cart.index');
+    Route::post('/cart/add/{product}', 'store')->name('cart.store');
+    Route::put('/cart/update/{product}', 'update')->name('cart.update');
+    Route::delete('/cart/remove/{product}', 'destroy')->name('cart.destroy');
+});
 
-
+{/* Admin section (Departments & Categories)------------------------------------------------------------ */}
 Route::middleware(['auth', 'role:Admin'])->group(function () {
 
     Route::get('/dashboard',function () {
@@ -43,6 +49,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 
 });
 
+{/* Vendor section (add products)--------------------------------------------------------------------------- */}
 Route::middleware(['auth', 'role:Vendor|Admin'])->group(function () {
 
        // Variaciones (color, tamaño, estilo, tipo)

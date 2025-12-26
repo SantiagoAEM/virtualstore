@@ -13,8 +13,8 @@ class ProductResourceController extends Controller
     public function home()
     {
         $products = ProductListResource::collection(
-            Product::with(['department', 'user','variations.images'])
-            ->where('status', 'published')
+            Product::with(['department', 'user'])
+            ->published()
             ->paginate(12)
         );
         return inertia('home', compact('products'));

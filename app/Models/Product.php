@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
@@ -41,6 +43,22 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+    public function scopeForVendor($query): Builder
+    {
+        return $query->where('created_by', Auth::id());
+    }
+
+    public function scopePublished($query): Builder
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeForwebsite($query): Builder
+    {
+        return $query->published();
     }
     
 }
